@@ -5,6 +5,7 @@ This module contains functions to transform raw text into cleaned text
 suitable for natural language processing tasks like clustering.
 """
 
+import io
 from string import punctuation
 
 
@@ -33,7 +34,8 @@ def load_stopwords(filepath='data/stopwords.txt'):
     """
     with open(filepath, 'r', encoding='utf-8') as f:
         # Read all lines, strip whitespace, and convert to set
-        return set(line.strip().lower() for line in f if line.strip())
+        text = set(line.strip().lower() for line in f if line.strip())
+        return text
 
 
 def lowercase_text(text):
@@ -53,7 +55,8 @@ def lowercase_text(text):
     >>> lowercase_text('AbC')
     'abc'
     """
-    pass
+    with io.open(text, 'r', encoding='utf-8') as f:
+        return f.read().lower()
 
 
 def remove_punctuation(text, punctuation=punctuation):
@@ -81,7 +84,10 @@ def remove_punctuation(text, punctuation=punctuation):
     """
     # TODO: Your code here
     # Hint: Loop through each punctuation character and replace it
-    pass
+    with io.open(text, "r", encoding="utf-8") as infile, \
+         open(punctuation, "w", encoding="utf-8") as outfile:
+        for line in text:
+            outfile.write(line.translate(str.maketrans('', '', punctuation)))
 
 
 def remove_newline(text):
